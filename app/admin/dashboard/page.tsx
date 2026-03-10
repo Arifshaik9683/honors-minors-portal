@@ -327,8 +327,8 @@ export default function AdminDashboard() {
                                 onChange={(e) => setEditingSubject({ ...editingSubject, faculty: e.target.value })}
                             />
                         </div>
-                        <div style={{ display: "flex", gap: 10 }}>
-                            <div style={styles.formGroup}>
+                        <div className="flex flex-col md:flex-row gap-4">
+                            <div style={styles.formGroup} className="flex-1">
                                 <label>Credits</label>
                                 <input
                                     type="number"
@@ -337,7 +337,7 @@ export default function AdminDashboard() {
                                     onChange={(e) => setEditingSubject({ ...editingSubject, credits: Number(e.target.value) })}
                                 />
                             </div>
-                            <div style={styles.formGroup}>
+                            <div style={styles.formGroup} className="flex-1">
                                 <label>Total Seats</label>
                                 <input
                                     type="number"

@@ -1,35 +1,51 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
     const router = useRouter();
+
+    const [menuOpen, setMenuOpen] = useState(false);
 
     return (
         <div style={styles.container}>
             {/* Navbar */}
             <nav className="flex flex-col md:flex-row justify-between items-center px-4 md:px-[5%] py-4 sticky top-0 bg-white/80 backdrop-blur-md z-[100] shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-b border-white/30 animate-slide-down">
-                <div style={styles.logoContainer} className="mb-4 md:mb-0">
-                    <img
-                        src="/logo.jpeg"
-                        alt="Logo"
-                        style={styles.logoImage}
-                    />
-                    <h1 style={styles.logo}>H&M Portal</h1>
-                </div>
-                <div className="flex flex-wrap justify-center gap-4 md:gap-8 items-center mb-4 md:mb-0">
-                    <a href="#" style={styles.navLink} className="nav-link-animated text-sm md:text-base">Home</a>
-                    <a href="#about" style={styles.navLink} className="nav-link-animated text-sm md:text-base">About</a>
-                    <a href="#announcements" style={styles.navLink} className="nav-link-animated text-sm md:text-base">Announcements</a>
-                    <a href="#placement" style={styles.navLink} className="nav-link-animated text-sm md:text-base">Placement</a>
-                </div>
-                <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-                    <button style={styles.navBtn} className="hover-lift text-sm md:text-base whitespace-nowrap" onClick={() => router.push("/student")}>
-                        Student Login
+                <div className="flex justify-between items-center w-full md:w-auto mb-4 md:mb-0">
+                    <div style={styles.logoContainer}>
+                        <img
+                            src="/logo.jpeg"
+                            alt="Logo"
+                            style={styles.logoImage}
+                        />
+                        <h1 style={styles.logo}>H&M Portal</h1>
+                    </div>
+                    {/* Hamburger Icon */}
+                    <button
+                        className="md:hidden text-2xl text-gray-700 focus:outline-none"
+                        onClick={() => setMenuOpen(!menuOpen)}
+                    >
+                        {menuOpen ? "✖" : "☰"}
                     </button>
-                    <button style={styles.navBtnOutline} className="hover-lift text-sm md:text-base whitespace-nowrap" onClick={() => router.push("/admin")}>
-                        Admin Login
-                    </button>
+                </div>
+
+                {/* Links and Buttons (Hidden on mobile unless menu is open) */}
+                <div className={`${menuOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row w-full md:w-auto items-center gap-4 md:gap-8 transition-all duration-300`}>
+                    <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 items-center w-full md:w-auto text-center">
+                        <a href="#" style={styles.navLink} className="nav-link-animated text-sm md:text-base w-full md:w-auto py-2 md:py-0 border-b md:border-none border-gray-100" onClick={() => setMenuOpen(false)}>Home</a>
+                        <a href="#about" style={styles.navLink} className="nav-link-animated text-sm md:text-base w-full md:w-auto py-2 md:py-0 border-b md:border-none border-gray-100" onClick={() => setMenuOpen(false)}>About</a>
+                        <a href="#announcements" style={styles.navLink} className="nav-link-animated text-sm md:text-base w-full md:w-auto py-2 md:py-0 border-b md:border-none border-gray-100" onClick={() => setMenuOpen(false)}>Announcements</a>
+                        <a href="#placement" style={styles.navLink} className="nav-link-animated text-sm md:text-base w-full md:w-auto py-2 md:py-0" onClick={() => setMenuOpen(false)}>Placement</a>
+                    </div>
+                    <div className="flex flex-row justify-center gap-3 md:gap-4 mt-2 md:mt-0 w-full md:w-auto">
+                        <button style={styles.navBtn} className="hover-lift text-sm md:text-base whitespace-nowrap flex-1 md:flex-none" onClick={() => router.push("/student")}>
+                            Student Login
+                        </button>
+                        <button style={styles.navBtnOutline} className="hover-lift text-sm md:text-base whitespace-nowrap flex-1 md:flex-none" onClick={() => router.push("/admin")}>
+                            Admin Login
+                        </button>
+                    </div>
                 </div>
             </nav>
 
