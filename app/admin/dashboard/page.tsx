@@ -146,7 +146,7 @@ export default function AdminDashboard() {
     return (
         <div style={styles.container}>
             {/* Header */}
-            <header style={styles.header}>
+            <header style={styles.header} className="flex-col sm:flex-row gap-4 p-4 sm:px-10">
                 <div style={styles.logoContainer}>
                     <img src="/logo.jpeg" alt="Logo" style={styles.logo} />
                     <h1 style={styles.title}>Admin Dashboard</h1>
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
                 <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
             </header>
 
-            <main style={styles.main}>
+            <main style={styles.main} className="px-4 py-6 sm:p-10">
                 {/* Summary Cards */}
                 <div style={styles.summaryGrid}>
                     <SummaryCard title="2nd Year Enrolled" value={enrolled2ndYears} icon="🎓" color="blue" />
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Tabs */}
-                <div style={styles.tabs}>
+                <div style={styles.tabs} className="flex-wrap justify-center sm:justify-start">
                     <button
                         style={activeTab === "enrollments" ? styles.activeTab : styles.tab}
                         onClick={() => setActiveTab("enrollments")}
@@ -185,7 +185,7 @@ export default function AdminDashboard() {
                     {activeTab === "enrollments" && (
                         <div className="animate-fade-in">
                             {/* Filters */}
-                            <div style={styles.filterBar}>
+                            <div style={styles.filterBar} className="flex-col sm:flex-row">
                                 <input
                                     style={styles.searchInput}
                                     placeholder="🔍 Search name or roll no..."
@@ -410,7 +410,7 @@ const styles = {
     },
     header: {
         background: "white",
-        padding: "15px 40px",
+        // Tailwind handles padding
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -441,7 +441,7 @@ const styles = {
         cursor: "pointer",
     },
     main: {
-        padding: "40px",
+        // Tailwind handles padding
         maxWidth: 1400,
         margin: "0 auto",
     },

@@ -83,12 +83,12 @@ export default function AdminLogin() {
     };
 
     return (
-        <div style={styles.container} className="animate-bg-pan">
+        <div style={styles.container} className="animate-bg-pan py-10 px-4">
             {/* Background Blobs for depth */}
-            <div className="animate-blob" style={{ position: "absolute", top: "20%", left: "20%", width: "300px", height: "300px", background: "rgba(236, 72, 153, 0.3)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0 }}></div>
-            <div className="animate-blob animation-delay-2000" style={{ position: "absolute", bottom: "20%", right: "20%", width: "250px", height: "250px", background: "rgba(139, 92, 246, 0.3)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0 }}></div>
+            <div className="animate-blob hidden sm:block" style={{ position: "absolute", top: "20%", left: "20%", width: "300px", height: "300px", background: "rgba(236, 72, 153, 0.3)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0 }}></div>
+            <div className="animate-blob animation-delay-2000 hidden sm:block" style={{ position: "absolute", bottom: "20%", right: "20%", width: "250px", height: "250px", background: "rgba(139, 92, 246, 0.3)", borderRadius: "50%", filter: "blur(60px)", zIndex: 0 }}></div>
 
-            <div style={styles.card} className="glass-panel hover-lift reveal-stagger delay-100">
+            <div style={styles.card} className="w-full max-w-[420px] p-6 sm:px-10 sm:py-[50px] glass-panel hover-lift reveal-stagger delay-100">
                 <div style={styles.logoContainer}>
                     <img src="/logo.jpeg" alt="Portal Logo" style={styles.logo} className="logo-animate hover-lift" />
                 </div>
@@ -235,8 +235,6 @@ const styles = {
     },
 
     card: {
-        width: 420,
-        padding: "50px 40px",
         borderRadius: 24,
         textAlign: "center" as const,
         zIndex: 1,

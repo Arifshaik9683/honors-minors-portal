@@ -169,8 +169,8 @@ function StudentLoginContent() {
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.card} className="glass-panel hover-lift reveal-stagger delay-100">
+        <div style={styles.container} className="py-10 px-4">
+            <div style={styles.card} className="w-full max-w-[450px] p-6 sm:px-[30px] sm:py-[40px] glass-panel hover-lift reveal-stagger delay-100">
                 <div style={styles.logoContainer}>
                     <img src="/logo.jpeg" alt="Portal Logo" style={styles.logo} className="hover-lift" />
                 </div>
@@ -328,11 +328,8 @@ const styles = {
         alignItems: "center",
         background: "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)",
         fontFamily: "'Inter', sans-serif",
-        padding: "40px 0",
     },
     card: {
-        width: 450,
-        padding: "40px 30px",
         borderRadius: 20,
         textAlign: "center" as const,
     },

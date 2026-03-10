@@ -62,21 +62,21 @@ export default function Timetable() {
             <div className="animate-blob" style={{ position: "absolute", top: "10%", left: "5%", width: "400px", height: "400px", background: "rgba(37, 99, 235, 0.1)", borderRadius: "50%", filter: "blur(80px)", zIndex: 0 }}></div>
             <div className="animate-blob animation-delay-2000" style={{ position: "absolute", bottom: "10%", right: "5%", width: "300px", height: "300px", background: "rgba(147, 51, 234, 0.1)", borderRadius: "50%", filter: "blur(80px)", zIndex: 0 }}></div>
 
-            <nav style={styles.navbar}>
+            <nav style={styles.navbar} className="flex-col sm:flex-row gap-4 py-4 px-4 sm:px-[5%]">
                 <div style={styles.navBrand}>Student Portal</div>
                 <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                    <button onClick={() => router.push('/student/enroll')} style={{ ...styles.actionBtn, color: '#2563eb', borderColor: '#2563eb' }} className="hover-scale">
+                    <button onClick={() => router.push('/student/enroll')} style={{ ...styles.actionBtn, color: '#2563eb', borderColor: '#2563eb' }} className="hover-scale text-sm sm:text-base">
                         Back to Enroll
                     </button>
-                    <button onClick={logout} style={{ ...styles.actionBtn, color: '#ef4444', borderColor: '#ef4444' }} className="hover-scale">
+                    <button onClick={logout} style={{ ...styles.actionBtn, color: '#ef4444', borderColor: '#ef4444' }} className="hover-scale text-sm sm:text-base">
                         Logout
                     </button>
                 </div>
             </nav>
 
-            <main style={{ ...styles.main, position: "relative", zIndex: 1 }}>
+            <main style={{ ...styles.main, position: "relative", zIndex: 1 }} className="px-4 py-10 sm:py-[60px] sm:px-[5%]">
                 <header style={styles.header} className="animate-slide-up">
-                    <h1 style={styles.title}>Your Timetable</h1>
+                    <h1 style={styles.title} className="text-3xl sm:text-[42px]">Your Timetable</h1>
                     <p style={styles.subtitle}>
                         View the schedule for your enrolled subjects. More details will be added soon.
                     </p>
@@ -132,7 +132,7 @@ const styles = {
     navbar: {
         background: "rgba(255, 255, 255, 0.8)",
         backdropFilter: "blur(10px)",
-        padding: "15px 5%",
+        // Tailwind handles padding
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -159,7 +159,7 @@ const styles = {
         transition: "all 0.2s",
     },
     main: {
-        padding: "60px 5%",
+        // Tailwind handles padding
         maxWidth: 900,
         margin: "0 auto",
     },
@@ -168,7 +168,6 @@ const styles = {
         marginBottom: 40,
     },
     title: {
-        fontSize: 42,
         fontWeight: 800,
         color: "#0f172a",
         marginBottom: 15,

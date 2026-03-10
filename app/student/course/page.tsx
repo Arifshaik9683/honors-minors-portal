@@ -2,7 +2,7 @@ import { courses } from "../../data/courses";
 
 export default function Courses() {
     return (
-        <main style={{ padding: 40 }}>
+        <main className="p-4 sm:p-10">
             <h1>Available Courses</h1>
 
             {courses.map((c) => (

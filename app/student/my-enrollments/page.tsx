@@ -12,7 +12,7 @@ export default function MyEnrollments() {
     }, []);
 
     return (
-        <main style={{ padding: 40 }}>
+        <main className="p-4 sm:p-10">
             <h1>My Enrollments</h1>
 
             {data.length === 0 && <p>No courses enrolled.</p>}

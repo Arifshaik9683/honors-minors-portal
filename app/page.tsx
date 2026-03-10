@@ -8,8 +8,8 @@ export default function Home() {
     return (
         <div style={styles.container}>
             {/* Navbar */}
-            <nav style={styles.navbar} className="animate-slide-down">
-                <div style={styles.logoContainer}>
+            <nav className="flex flex-col md:flex-row justify-between items-center px-4 md:px-[5%] py-4 sticky top-0 bg-white/80 backdrop-blur-md z-[100] shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-b border-white/30 animate-slide-down">
+                <div style={styles.logoContainer} className="mb-4 md:mb-0">
                     <img
                         src="/logo.jpeg"
                         alt="Logo"
@@ -17,17 +17,17 @@ export default function Home() {
                     />
                     <h1 style={styles.logo}>H&M Portal</h1>
                 </div>
-                <div style={styles.navLinks}>
-                    <a href="#" style={styles.navLink} className="nav-link-animated">Home</a>
-                    <a href="#about" style={styles.navLink} className="nav-link-animated">About</a>
-                    <a href="#announcements" style={styles.navLink} className="nav-link-animated">Announcements</a>
-                    <a href="#placement" style={styles.navLink} className="nav-link-animated">Placement</a>
+                <div className="flex flex-wrap justify-center gap-4 md:gap-8 items-center mb-4 md:mb-0">
+                    <a href="#" style={styles.navLink} className="nav-link-animated text-sm md:text-base">Home</a>
+                    <a href="#about" style={styles.navLink} className="nav-link-animated text-sm md:text-base">About</a>
+                    <a href="#announcements" style={styles.navLink} className="nav-link-animated text-sm md:text-base">Announcements</a>
+                    <a href="#placement" style={styles.navLink} className="nav-link-animated text-sm md:text-base">Placement</a>
                 </div>
-                <div style={styles.authButtons}>
-                    <button style={styles.navBtn} className="hover-lift" onClick={() => router.push("/student")}>
+                <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+                    <button style={styles.navBtn} className="hover-lift text-sm md:text-base whitespace-nowrap" onClick={() => router.push("/student")}>
                         Student Login
                     </button>
-                    <button style={styles.navBtnOutline} className="hover-lift" onClick={() => router.push("/admin")}>
+                    <button style={styles.navBtnOutline} className="hover-lift text-sm md:text-base whitespace-nowrap" onClick={() => router.push("/admin")}>
                         Admin Login
                     </button>
                 </div>
@@ -35,22 +35,25 @@ export default function Home() {
 
             {/* Hero Section */}
             <div className="animate-slide-up">
-                <header style={styles.hero} className="animate-bg-pan">
+                <header className="px-4 md:px-[5%] py-12 md:py-20 text-center flex flex-col justify-center items-center relative overflow-hidden min-h-[65vh] animate-bg-pan" style={{
+                    backgroundImage: "radial-gradient(circle at top left, rgba(139, 92, 246, 0.15) 0%, transparent 40%), radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.15) 0%, transparent 40%), linear-gradient(-45deg, #fdf4ff, #faf5ff, #fff1f2, #ffffff)",
+                    backgroundSize: "400% 400%",
+                }}>
                     {/* Background Blobs */}
                     <div className="animate-blob" style={{ position: "absolute", top: "0%", left: "0%", width: "400px", height: "400px", background: "rgba(139, 92, 246, 0.4)", borderRadius: "50%", filter: "blur(70px)", zIndex: 0 }}></div>
                     <div className="animate-blob animation-delay-2000" style={{ position: "absolute", top: "10%", right: "10%", width: "300px", height: "300px", background: "rgba(236, 72, 153, 0.4)", borderRadius: "50%", filter: "blur(70px)", zIndex: 0 }}></div>
                     <div className="animate-blob animation-delay-4000" style={{ position: "absolute", bottom: "10%", left: "20%", width: "250px", height: "250px", background: "rgba(99, 102, 241, 0.4)", borderRadius: "50%", filter: "blur(70px)", zIndex: 0 }}></div>
 
-                    <div style={{ ...styles.heroContent, position: "relative", zIndex: 1 }}>
-                        <h1 style={styles.heroTitle}>
-                            Welcome to Our Website Portal <br />
-                            <span className="text-gradient-animated" style={{ fontSize: "inherit", fontWeight: "inherit" }}>(Honors & Minors Portal)</span>
+                    <div className="max-w-[800px] relative z-10 w-full">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold mb-4 sm:mb-5 leading-tight text-gray-900">
+                            Welcome to Our Website Portal <br className="hidden sm:block" />
+                            <span className="text-gradient-animated block sm:inline mt-2 sm:mt-0" style={{ fontSize: "inherit", fontWeight: "inherit" }}>(Honors & Minors Portal)</span>
                         </h1>
-                        <p style={styles.heroSubtitle}>
+                        <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 sm:mb-10 px-2 sm:px-0">
                             Unlock new academic horizons. Specialize in your field or explore
                             interdisciplinary passions.
                         </p>
-                        <button style={styles.ctaButton} className="hover-lift animate-float-smooth animate-pulse-glow" onClick={() => router.push("/student/register")}>
+                        <button style={styles.ctaButton} className="hover-lift animate-float-smooth animate-pulse-glow text-sm sm:text-base md:text-lg" onClick={() => router.push("/student/register")}>
                             Get Started
                         </button>
                     </div>
@@ -58,9 +61,9 @@ export default function Home() {
             </div>
 
             {/* Information Section */}
-            <section id="about" style={styles.section} className="reveal-stagger delay-100">
-                <h2 style={styles.sectionTitle}>Explore Our Programs</h2>
-                <div style={styles.grid}>
+            <section id="about" className="px-4 sm:px-8 md:px-[10%] py-12 md:py-20 reveal-stagger delay-100">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 text-gray-900">Explore Our Programs</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                     {/* Honors Card */}
                     <div style={styles.card} className="glass-panel hover-lift">
                         <div style={styles.imageContainer}>
@@ -70,8 +73,8 @@ export default function Home() {
                                 className="image-zoom"
                             />
                         </div>
-                        <h3 style={styles.cardTitle}>Honors Degree</h3>
-                        <p style={styles.cardText}>
+                        <h3 className="text-xl md:text-2xl font-semibold m-5 text-gray-900">Honors Degree</h3>
+                        <p className="text-gray-600 m-5 mb-8 leading-relaxed">
                             Dive deeper into your major. The Honors program offers
                             advanced coursework and research opportunities for students
                             who want to excel in their core discipline.
@@ -87,8 +90,8 @@ export default function Home() {
                                 className="image-zoom"
                             />
                         </div>
-                        <h3 style={styles.cardTitle}>Minors Degree</h3>
-                        <p style={styles.cardText}>
+                        <h3 className="text-xl md:text-2xl font-semibold m-5 text-gray-900">Minors Degree</h3>
+                        <p className="text-gray-600 m-5 mb-8 leading-relaxed">
                             Broaden your skillset. A Minor allows you to gain
                             expertise in a secondary field, making you a more versatile
                             and competitive professional.
@@ -98,32 +101,32 @@ export default function Home() {
             </section>
 
             {/* Eligibility Section */}
-            <section style={{ ...styles.section, background: "#f8f9fa" }} className="reveal-stagger delay-200">
-                <h2 style={styles.sectionTitle}>Eligibility Criteria</h2>
-                <div style={styles.eligibilityContainer} className="glass-panel hover-lift">
-                    <div style={styles.criteriaItem}>
-                        <span style={styles.checkIcon}>✅</span>
+            <section className="px-4 sm:px-8 md:px-[10%] py-12 md:py-20 reveal-stagger delay-200 bg-[#f8f9fa]">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 text-gray-900">Eligibility Criteria</h2>
+                <div className="max-w-[800px] mx-auto p-6 md:p-10 rounded-2xl glass-panel hover-lift">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-8 items-start">
+                        <span style={styles.checkIcon} className="shrink-0">✅</span>
                         <div>
-                            <h4 style={styles.criteriaTitle}>Academic Year</h4>
-                            <p style={styles.criteriaText}>
+                            <h4 className="text-lg font-semibold mb-1 text-gray-900">Academic Year</h4>
+                            <p className="text-gray-600 m-0">
                                 Student is <strong>2nd Year Compulsory</strong>.
                             </p>
                         </div>
                     </div>
-                    <div style={styles.criteriaItem}>
-                        <span style={styles.checkIcon}>🏆</span>
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-8 items-start">
+                        <span style={styles.checkIcon} className="shrink-0">🏆</span>
                         <div>
-                            <h4 style={styles.criteriaTitle}>CGPA Requirement</h4>
-                            <p style={styles.criteriaText}>
+                            <h4 className="text-lg font-semibold mb-1 text-gray-900">CGPA Requirement</h4>
+                            <p className="text-gray-600 m-0">
                                 CGPA must be <strong>greater than or equal to 8.0</strong>.
                             </p>
                         </div>
                     </div>
-                    <div style={styles.criteriaItem}>
-                        <span style={styles.checkIcon}>📚</span>
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 mb-0 items-start">
+                        <span style={styles.checkIcon} className="shrink-0">📚</span>
                         <div>
-                            <h4 style={styles.criteriaTitle}>No Backlogs</h4>
-                            <p style={styles.criteriaText}>
+                            <h4 className="text-lg font-semibold mb-1 text-gray-900">No Backlogs</h4>
+                            <p className="text-gray-600 m-0">
                                 Should have cleared all previous semesters without any active backlogs.
                             </p>
                         </div>
@@ -132,36 +135,36 @@ export default function Home() {
             </section>
 
             {/* Announcements Section */}
-            <section id="announcements" style={styles.section} className="reveal-stagger delay-300">
-                <h2 style={styles.sectionTitle}>Latest Announcements</h2>
-                <div style={styles.announcementContainer}>
+            <section id="announcements" className="px-4 sm:px-8 md:px-[10%] py-12 md:py-20 reveal-stagger delay-300">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 text-gray-900">Latest Announcements</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1000px] mx-auto">
                     <div style={styles.announcementCard} className="glass-panel hover-lift">
                         <span style={styles.dateTag} className="animate-pulse-glow">New</span>
-                        <h4 style={styles.announcementTitle}>Fall 2024 Enrollment Open</h4>
-                        <p style={styles.announcementText}>Registration for Honors & Minors programs starts from October 1st.</p>
+                        <h4 className="text-lg font-semibold mb-2 text-gray-900">Fall 2024 Enrollment Open</h4>
+                        <p className="text-sm text-gray-600 leading-relaxed">Registration for Honors & Minors programs starts from October 1st.</p>
                     </div>
                     <div style={styles.announcementCard} className="glass-panel hover-lift">
                         <span style={{ ...styles.dateTag, background: "#f3f4f6", color: "#666" }}>Sep 15</span>
-                        <h4 style={styles.announcementTitle}>Orientation Session</h4>
-                        <p style={styles.announcementText}>Join us for a virtual orientation session to learn more about the courses.</p>
+                        <h4 className="text-lg font-semibold mb-2 text-gray-900">Orientation Session</h4>
+                        <p className="text-sm text-gray-600 leading-relaxed">Join us for a virtual orientation session to learn more about the courses.</p>
                     </div>
                     <div style={styles.announcementCard} className="glass-panel hover-lift">
                         <span style={{ ...styles.dateTag, background: "#f3f4f6", color: "#666" }}>Aug 30</span>
-                        <h4 style={styles.announcementTitle}>Curriculum Update</h4>
-                        <p style={styles.announcementText}>New minor programs in Data Science and AI have been introduced.</p>
+                        <h4 className="text-lg font-semibold mb-2 text-gray-900">Curriculum Update</h4>
+                        <p className="text-sm text-gray-600 leading-relaxed">New minor programs in Data Science and AI have been introduced.</p>
                     </div>
                 </div>
             </section>
 
             {/* Placement Section */}
-            <section id="placement" style={{ ...styles.section, background: "#f0f9ff" }} className="reveal-stagger delay-400">
-                <h2 style={styles.sectionTitle}>Placement Opportunities</h2>
-                <div style={styles.heroContent}>
-                    <p style={{ ...styles.heroSubtitle, marginBottom: 30 }}>
+            <section id="placement" className="px-4 sm:px-8 md:px-[10%] py-12 md:py-20 reveal-stagger delay-400 bg-[#f0f9ff]">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 text-gray-900">Placement Opportunities</h2>
+                <div className="max-w-[800px] mx-auto text-center">
+                    <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-10">
                         Students with Honors & Minors degrees have a competitive edge in placements.
                         Top recruiters value the specialized skills gained through these programs.
                     </p>
-                    <div style={styles.grid}>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-10">
                         <div style={styles.statCard} className="glass-panel hover-lift">
                             <h3 style={styles.statNumber}>95%</h3>
                             <p style={styles.statLabel}>Placement Rate</p>
@@ -193,20 +196,6 @@ const styles = {
         lineHeight: 1.6,
         overflowX: "hidden" as const,
     },
-    navbar: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "15px 5%",
-        position: "sticky" as const,
-        top: 0,
-        background: "rgba(255, 255, 255, 0.8)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        zIndex: 100,
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.3)",
-    },
     logoContainer: {
         display: "flex",
         alignItems: "center",
@@ -225,26 +214,16 @@ const styles = {
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
     },
-    navLinks: {
-        display: "flex",
-        gap: 30,
-        alignItems: "center",
-    },
     navLink: {
-        fontSize: 16,
-        fontWeight: 600,
         color: "#374151",
         cursor: "pointer",
         transition: "color 0.2s",
         textDecoration: "none",
         position: "relative" as const,
-    },
-    authButtons: {
-        display: "flex",
-        gap: 15,
+        fontWeight: 600,
     },
     navBtn: {
-        padding: "10px 20px",
+        padding: "8px 16px",
         background: "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
         color: "white",
         border: "none",
@@ -254,7 +233,7 @@ const styles = {
         transition: "transform 0.2s",
     },
     navBtnOutline: {
-        padding: "10px 20px",
+        padding: "8px 16px",
         background: "transparent",
         color: "#8b5cf6",
         border: "2px solid #8b5cf6",
@@ -262,36 +241,8 @@ const styles = {
         cursor: "pointer",
         fontWeight: 600,
     },
-    hero: {
-        padding: "80px 5%",
-        textAlign: "center" as const,
-        backgroundImage: "radial-gradient(circle at top left, rgba(139, 92, 246, 0.15) 0%, transparent 40%), radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.15) 0%, transparent 40%), linear-gradient(-45deg, #fdf4ff, #faf5ff, #fff1f2, #ffffff)",
-        backgroundSize: "400% 400%",
-        minHeight: "65vh",
-        display: "flex",
-        flexDirection: "column" as const,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "relative" as const,
-        overflow: "hidden" as const,
-    },
-    heroContent: {
-        maxWidth: 800,
-    },
-    heroTitle: {
-        fontSize: 48,
-        fontWeight: 800,
-        marginBottom: 20,
-        lineHeight: 1.2,
-    },
-    heroSubtitle: {
-        fontSize: 20,
-        color: "#666",
-        marginBottom: 40,
-    },
     ctaButton: {
-        padding: "16px 40px",
-        fontSize: 18,
+        padding: "12px 32px",
         background: "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
         color: "white",
         border: "none",
@@ -300,21 +251,6 @@ const styles = {
         fontWeight: 600,
         boxShadow: "0 10px 25px rgba(236, 72, 153, 0.3)",
         transition: "all 0.3s ease",
-    },
-    section: {
-        padding: "80px 10%",
-    },
-    sectionTitle: {
-        fontSize: 36,
-        fontWeight: 700,
-        textAlign: "center" as const,
-        marginBottom: 60,
-        color: "#111",
-    },
-    grid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-        gap: 40,
     },
     card: {
         borderRadius: 24,
@@ -326,27 +262,6 @@ const styles = {
         overflow: "hidden",
         background: "#f3f4f6",
     },
-    cardTitle: {
-        fontSize: 24,
-        margin: "20px 20px 10px",
-    },
-    cardText: {
-        color: "#666",
-        margin: "0 20px 30px",
-        lineHeight: 1.6,
-    },
-    eligibilityContainer: {
-        maxWidth: 800,
-        margin: "0 auto",
-        padding: 40,
-        borderRadius: 20,
-    },
-    criteriaItem: {
-        display: "flex",
-        gap: 20,
-        marginBottom: 30,
-        alignItems: "flex-start",
-    },
     checkIcon: {
         fontSize: 24,
         background: "#fce7f3",
@@ -357,28 +272,11 @@ const styles = {
         alignItems: "center",
         borderRadius: "50%",
     },
-    criteriaTitle: {
-        fontSize: 18,
-        fontWeight: 600,
-        marginBottom: 5,
-        margin: 0,
-    },
-    criteriaText: {
-        color: "#666",
-        margin: 0,
-    },
     footer: {
         background: "#111",
         color: "white",
         textAlign: "center" as const,
         padding: 40,
-    },
-    announcementContainer: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-        gap: 20,
-        maxWidth: 1000,
-        margin: "0 auto",
     },
     announcementCard: {
         padding: 25,
@@ -395,17 +293,6 @@ const styles = {
         fontWeight: 600,
         marginBottom: 10,
         boxShadow: "0 2px 10px rgba(236, 72, 153, 0.2)",
-    },
-    announcementTitle: {
-        fontSize: 18,
-        fontWeight: 600,
-        marginBottom: 8,
-        color: "#111",
-    },
-    announcementText: {
-        fontSize: 14,
-        color: "#666",
-        lineHeight: 1.5,
     },
     statCard: {
         padding: 30,

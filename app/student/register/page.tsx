@@ -70,7 +70,7 @@ export default function Register() {
 
     return (
         <div style={styles.container}>
-            <div style={styles.card} className="glass-panel hover-lift reveal-stagger delay-100">
+            <div style={styles.card} className="w-full max-w-[550px] p-6 sm:p-10 glass-panel hover-lift reveal-stagger delay-100">
                 {/* ... existing header ... */}
                 <div style={styles.header}>
                     <img src="/logo.jpeg" alt="Logo" style={styles.logo} className="animate-bounce-slow hover-lift" />
@@ -78,7 +78,7 @@ export default function Register() {
                     <p style={styles.subtitle}>Join the Honors & Minors Portal</p>
                 </div>
 
-                <div style={styles.formGrid}>
+                <div style={styles.formGrid} className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
                     {/* ... other inputs ... */}
                     {/* ... other inputs ... */}
                     <div style={styles.inputGroup}>
@@ -188,9 +188,6 @@ const styles = {
         overflow: "hidden" as const,
     },
     card: {
-        width: "100%",
-        maxWidth: 550,
-        padding: "40px",
         borderRadius: 24,
         position: "relative" as const,
         zIndex: 10,
@@ -215,10 +212,7 @@ const styles = {
         color: "#64748b",
     },
     formGrid: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "20px",
-        marginBottom: 25,
+        // Tailwind handles layout
     },
     inputGroup: {
         textAlign: "left" as const,
