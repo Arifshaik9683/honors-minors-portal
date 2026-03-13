@@ -20,10 +20,12 @@ export default function Navbar() {
     }, [])
 
     const handleLogout = async () => {
-        await fetch('/api/auth/logout', { method: 'POST' })
-        setUser(null)
-        router.push('/')
-        router.refresh()
+        if (window.confirm("Are you sure you want to logout?")) {
+            await fetch('/api/auth/logout', { method: 'POST' })
+            setUser(null)
+            router.push('/')
+            router.refresh()
+        }
     }
 
     if (!user) return null // Or return a public navbar

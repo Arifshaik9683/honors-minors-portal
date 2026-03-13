@@ -46,10 +46,12 @@ export default function Timetable() {
     }, [router]);
 
     const logout = () => {
-        localStorage.removeItem("student");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("userEmail");
-        router.push("/");
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("student");
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("userEmail");
+            router.push("/");
+        }
     };
 
     if (loading) return <div style={styles.loading}>Loading timetable...</div>;

@@ -57,9 +57,11 @@ export default function AdminDashboard() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("userEmail");
-        router.push("/");
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("userRole");
+            localStorage.removeItem("userEmail");
+            router.push("/");
+        }
     };
 
     // --- Statistics ---
@@ -185,21 +187,23 @@ export default function AdminDashboard() {
                     {activeTab === "enrollments" && (
                         <div className="animate-fade-in">
                             {/* Filters */}
-                            <div style={styles.filterBar} className="flex-col sm:flex-row">
+                            <div style={styles.filterBar} className="flex flex-col md:flex-row gap-3 w-full px-4 sm:px-0">
                                 <input
                                     style={styles.searchInput}
+                                    className="w-full"
                                     placeholder="🔍 Search name or roll no..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <div style={styles.selectGroup}>
-                                    <select style={styles.select} value={filterSection} onChange={(e) => setFilterSection(e.target.value)}>
+                                <div style={styles.selectGroup} className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                                    <select style={styles.select} className="w-full sm:w-auto" value={filterSection} onChange={(e) => setFilterSection(e.target.value)}>
                                         <option value="">All Sections</option>
                                         <option value="A">Section A</option>
                                         <option value="B">Section B</option>
                                         <option value="C">Section C</option>
+                                        <option value="D">Section D</option>
                                     </select>
-                                    <select style={styles.select} value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
+                                    <select style={styles.select} className="w-full sm:w-auto" value={filterSubject} onChange={(e) => setFilterSubject(e.target.value)}>
                                         <option value="">All Subjects</option>
                                         {subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                     </select>
