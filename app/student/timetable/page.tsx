@@ -4,6 +4,31 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Storage } from "../../utils/storage";
 
+const formatTime = (timeString: string) => {
+    if (!timeString) return "-";
+    try {
+        const [h, m] = timeString.split(':');
+        let hours = parseInt(h, 10);
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const minutes = m || '00';
+        return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+    } catch {
+        return timeString;
+    }
+};
+
+const parseTimetable = (ttString: string) => {
+    if (!ttString) return [];
+    try {
+        const parsed = JSON.parse(ttString);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+};
+
 export default function Timetable() {
     const router = useRouter();
     const [courses, setCourses] = useState<any[]>([]);
@@ -57,6 +82,7 @@ export default function Timetable() {
     if (loading) return <div style={styles.loading}>Loading timetable...</div>;
 
     const enrolledCourse = courses.find(c => String(c.id) === String(enrolledCourseId));
+    const parsedTimetable = parseTimetable(enrolledCourse?.timetable);
 
     return (
         <div style={styles.container}>
@@ -92,13 +118,30 @@ export default function Timetable() {
 
                             <div style={{ marginTop: '20px', padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                                 <h3 style={{ fontSize: '18px', color: '#1e293b', marginBottom: '15px' }}>Weekly Schedule</h3>
-                                {enrolledCourse.timetable ? (
-                                    <div style={{ whiteSpace: 'pre-wrap', color: '#475569', fontSize: '15px', lineHeight: 1.6, fontFamily: 'monospace' }}>
-                                        {enrolledCourse.timetable}
+                                {parsedTimetable.length > 0 ? (
+                                    <div className="overflow-x-auto rounded-xl border border-gray-200">
+                                        <table className="w-full table-auto border-collapse bg-white">
+                                            <thead>
+                                                <tr className="bg-gray-100 text-slate-700">
+                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">Day</th>
+                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">Start Time</th>
+                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">End Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {parsedTimetable.map((row: any, idx: number) => (
+                                                    <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{row.day || "-"}</td>
+                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.start)}</td>
+                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.end)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 ) : (
-                                    <p style={{ color: '#64748b', fontSize: '15px', fontStyle: 'italic' }}>
-                                        No timetable provided yet. The exact timetable details will be updated here shortly as provided.
+                                    <p style={{ color: '#64748b', fontSize: '15px', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+                                        No timetable available
                                     </p>
                                 )}
                             </div>
