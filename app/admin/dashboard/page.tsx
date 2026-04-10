@@ -95,11 +95,55 @@ export default function AdminDashboard() {
         return subjects.find(s => String(s.id) === String(id))?.name || "Unknown";
     };
 
+    // --- Timetable Management Logic ---
+    const timetableRows = (() => {
+        try {
+            const parsed = JSON.parse(editingSubject?.timetable || "[]");
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    })();
+
+    const handleTimetableChange = (index: number, field: string, value: string) => {
+        const newRows = [...timetableRows];
+        newRows[index] = { ...newRows[index], [field]: value };
+        setEditingSubject(prev => ({ ...(prev || {}), timetable: JSON.stringify(newRows) }));
+    };
+
+    const handleAddTimetableRow = () => {
+        const newRows = [...timetableRows, { day: "Monday", start: "", end: "" }];
+        setEditingSubject(prev => ({ ...(prev || {}), timetable: JSON.stringify(newRows) }));
+    };
+
+    const handleRemoveTimetableRow = (index: number) => {
+        const newRows = timetableRows.filter((_, i) => i !== index);
+        setEditingSubject(prev => ({ ...(prev || {}), timetable: JSON.stringify(newRows) }));
+    };
+
     // --- Subject Management Logic ---
     const handleSaveSubject = async () => {
         if (!editingSubject?.name || !editingSubject.faculty || !editingSubject.totalSeats) {
             alert("Please fill required fields (Name, Faculty, Seats)");
             return;
+        }
+
+        for (let i = 0; i < timetableRows.length; i++) {
+            const row = timetableRows[i];
+            if (!row.day || !row.start || !row.end) {
+                alert("Please fill all fields in the timetable (Day, Start Time, End Time)");
+                return;
+            }
+        }
+
+        const seen = new Set();
+        for (const row of timetableRows) {
+            const key = `${row.day}-${row.start}-${row.end}`;
+            if (seen.has(key)) {
+                alert("Duplicate timetable entry found for: " + key);
+                return;
+            }
+            seen.add(key);
         }
 
         try {
@@ -360,13 +404,79 @@ export default function AdminDashboard() {
                             />
                         </div>
                         <div style={styles.formGroup}>
-                            <label>Timetable</label>
-                            <textarea
-                                style={{ ...styles.modalInput, height: 80, fontFamily: 'monospace' }}
-                                placeholder="E.g.,&#10;Monday: 10:00 AM - 12:00 PM&#10;Wednesday: 02:00 PM - 04:00 PM"
-                                value={editingSubject?.timetable || ""}
-                                onChange={(e) => setEditingSubject({ ...editingSubject, timetable: e.target.value })}
-                            />
+                            <div className="flex justify-between items-center mb-2">
+                                <label>Timetable</label>
+                                <button
+                                    onClick={handleAddTimetableRow}
+                                    style={{ background: "#2563eb", color: "white", border: "none", padding: "4px 10px", borderRadius: "6px", fontSize: "12px", cursor: "pointer" }}
+                                >
+                                    + Add Row
+                                </button>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="table-auto w-full border border-gray-300 text-sm">
+                                    <thead className="bg-gray-100">
+                                        <tr>
+                                            <th className="border border-gray-300 px-2 py-1 text-left">Day</th>
+                                            <th className="border border-gray-300 px-2 py-1 text-left">Start Time</th>
+                                            <th className="border border-gray-300 px-2 py-1 text-left">End Time</th>
+                                            <th className="border border-gray-300 px-2 py-1 text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {timetableRows.map((row: any, i: number) => (
+                                            <tr key={i}>
+                                                <td className="border border-gray-300 p-1">
+                                                    <select
+                                                        className="w-full px-2 py-1 border border-gray-300 rounded"
+                                                        value={row.day || "Monday"}
+                                                        onChange={(e) => handleTimetableChange(i, "day", e.target.value)}
+                                                    >
+                                                        <option value="Monday">Monday</option>
+                                                        <option value="Tuesday">Tuesday</option>
+                                                        <option value="Wednesday">Wednesday</option>
+                                                        <option value="Thursday">Thursday</option>
+                                                        <option value="Friday">Friday</option>
+                                                        <option value="Saturday">Saturday</option>
+                                                    </select>
+                                                </td>
+                                                <td className="border border-gray-300 p-1">
+                                                    <input
+                                                        type="time"
+                                                        className="w-full px-2 py-1 border border-gray-300 rounded"
+                                                        value={row.start || ""}
+                                                        onChange={(e) => handleTimetableChange(i, "start", e.target.value)}
+                                                    />
+                                                </td>
+                                                <td className="border border-gray-300 p-1">
+                                                    <input
+                                                        type="time"
+                                                        className="w-full px-2 py-1 border border-gray-300 rounded"
+                                                        value={row.end || ""}
+                                                        onChange={(e) => handleTimetableChange(i, "end", e.target.value)}
+                                                    />
+                                                </td>
+                                                <td className="border border-gray-300 p-1 text-center">
+                                                    <button
+                                                        onClick={() => handleRemoveTimetableRow(i)}
+                                                        style={{ color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontSize: "16px" }}
+                                                        title="Delete Row"
+                                                    >
+                                                        🗑️
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {timetableRows.length === 0 && (
+                                            <tr>
+                                                <td colSpan={4} className="border border-gray-300 p-2 text-center text-gray-500 italic">
+                                                    No timetable entries added. Click "+ Add Row" to create one.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div style={styles.modalActions}>
                             <button style={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>Cancel</button>
