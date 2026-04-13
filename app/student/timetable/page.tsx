@@ -112,32 +112,81 @@ export default function Timetable() {
 
                             <div style={{ marginTop: '20px', padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                                 <h3 style={{ fontSize: '18px', color: '#1e293b', marginBottom: '15px' }}>Weekly Schedule</h3>
-                                {timetableData && timetableData.length > 0 ? (
-                                    <div className="overflow-x-auto rounded-xl border border-gray-200">
-                                        <table className="w-full table-auto border-collapse bg-white">
-                                            <thead>
-                                                <tr className="bg-gray-100 text-slate-700">
-                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">Day</th>
-                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">Start Time</th>
-                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">End Time</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {timetableData.map((row: any, idx: number) => (
-                                                    <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{row.day || "-"}</td>
-                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.start)}</td>
-                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.end)}</td>
+                                {(() => {
+                                    if (!timetableData || timetableData.length === 0) {
+                                        return (
+                                            <p style={{ color: '#64748b', fontSize: '15px', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+                                                No timetable available
+                                            </p>
+                                        );
+                                    }
+
+                                    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                                    const timeSlotsMap: Record<string, Record<string, any>> = {};
+
+                                    timetableData.forEach((row: any) => {
+                                        if (!row.start || !row.end) return;
+                                        const timeKey = `${row.start}-${row.end}`;
+                                        if (!timeSlotsMap[timeKey]) {
+                                            timeSlotsMap[timeKey] = {};
+                                        }
+                                        timeSlotsMap[timeKey][row.day] = {
+                                            subject: row.subject || enrolledCourse.name,
+                                            instructor: enrolledCourse.faculty,
+                                            year: row.year
+                                        };
+                                    });
+
+                                    const sortedSlots = Object.keys(timeSlotsMap).sort((a, b) => {
+                                        const timeA = a.split('-')[0];
+                                        const timeB = b.split('-')[0];
+                                        return timeA.localeCompare(timeB);
+                                    });
+
+                                    return (
+                                        <div className="overflow-x-auto rounded-xl border border-gray-200">
+                                            <table className="w-full min-w-[700px] table-auto border-collapse bg-white">
+                                                <thead>
+                                                    <tr className="bg-gray-100 text-slate-700">
+                                                        <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center border-r">Time \ Day</th>
+                                                        {days.map(day => (
+                                                            <th key={day} className="py-3 px-2 border-b border-gray-200 font-semibold text-center">{day}</th>
+                                                        ))}
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                ) : (
-                                    <p style={{ color: '#64748b', fontSize: '15px', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
-                                        No timetable available
-                                    </p>
-                                )}
+                                                </thead>
+                                                <tbody>
+                                                    {sortedSlots.map((slot, idx) => {
+                                                        const [start, end] = slot.split('-');
+                                                        const formattedTime = `${formatTime(start)} - ${formatTime(end)}`;
+                                                        return (
+                                                            <tr key={idx} className="hover:bg-slate-50 transition-colors border-b last:border-b-0 border-gray-100">
+                                                                <td className="py-3 px-4 text-center text-slate-700 font-medium whitespace-nowrap border-r border-gray-100 bg-gray-50/50">
+                                                                    {formattedTime}
+                                                                </td>
+                                                                {days.map(day => {
+                                                                    const cellData = timeSlotsMap[slot][day];
+                                                                    return (
+                                                                        <td key={day} className="py-3 px-2 text-center border-r last:border-r-0 border-gray-100 align-middle">
+                                                                            {cellData ? (
+                                                                                <div className="flex flex-col items-center justify-center gap-1">
+                                                                                    <span className="font-semibold text-slate-800">{cellData.subject}</span>
+                                                                                    {cellData.year && <span className="text-[10px] text-blue-600 font-medium uppercase tracking-wider">{cellData.year}</span>}
+                                                                                    {cellData.instructor && <span className="text-xs text-slate-500">{cellData.instructor}</span>}
+                                                                                </div>
+                                                                            ) : (
+                                                                                <span className="text-gray-300">-</span>
+                                                                            )}
+                                                                        </td>
+                                                                    );
+                                                                })}
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
                     ) : (
