@@ -118,74 +118,32 @@ export default function Timetable() {
 
                             <div style={{ marginTop: '20px', padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                                 <h3 style={{ fontSize: '18px', color: '#1e293b', marginBottom: '15px' }}>Weekly Schedule</h3>
-                                {(() => {
-                                    if (parsedTimetable.length === 0) {
-                                        return (
-                                            <p style={{ color: '#64748b', fontSize: '15px', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
-                                                No timetable available
-                                            </p>
-                                        );
-                                    }
-                                    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                                    const timeSlots = Array.from(
-                                        new Set(parsedTimetable.filter((t: any) => t.start && t.end).map((t: any) => `${t.start}|${t.end}`))
-                                    ).sort();
-
-                                    return (
-                                        <div className="overflow-x-auto rounded-xl border border-gray-200">
-                                            <table className="w-full table-auto border-collapse bg-white min-w-max">
-                                                <thead>
-                                                    <tr className="bg-gray-100 text-slate-700">
-                                                        <th className="py-3 px-4 border border-gray-200 font-semibold text-center w-[120px]">Day</th>
-                                                        {timeSlots.map((slotStr: any) => {
-                                                            const [start, end] = slotStr.split('|');
-                                                            return (
-                                                                <th key={slotStr} className="py-3 px-4 border border-gray-200 font-semibold text-center w-[160px]">
-                                                                    <div className="text-sm shrink-0 whitespace-nowrap">{formatTime(start)}</div>
-                                                                    <div className="text-xs text-gray-500 my-0.5">to</div>
-                                                                    <div className="text-sm shrink-0 whitespace-nowrap">{formatTime(end)}</div>
-                                                                </th>
-                                                            );
-                                                        })}
+                                {parsedTimetable.length > 0 ? (
+                                    <div className="overflow-x-auto rounded-xl border border-gray-200">
+                                        <table className="w-full table-auto border-collapse bg-white">
+                                            <thead>
+                                                <tr className="bg-gray-100 text-slate-700">
+                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">Day</th>
+                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">Start Time</th>
+                                                    <th className="py-3 px-4 border-b border-gray-200 font-semibold text-center">End Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {parsedTimetable.map((row: any, idx: number) => (
+                                                    <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{row.day || "-"}</td>
+                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.start)}</td>
+                                                        <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.end)}</td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {days.map((day: string, idx: number) => {
-                                                        return (
-                                                            <tr key={idx} className="hover:bg-slate-50 transition-colors">
-                                                                <td className="py-3 px-4 border border-gray-200 text-center font-medium text-slate-700 bg-gray-50 align-middle">
-                                                                    {day}
-                                                                </td>
-                                                                {timeSlots.map((slotStr: any) => {
-                                                                    const entry = parsedTimetable.find((t: any) => t.day === day && `${t.start}|${t.end}` === slotStr);
-                                                                    return (
-                                                                        <td key={slotStr} className="p-2 border border-gray-200 text-center align-middle h-full">
-                                                                            {entry ? (
-                                                                                <div className="bg-blue-50 text-blue-900 p-2 rounded border border-blue-100 shadow-sm flex flex-col items-center justify-center h-full min-h-[90px]">
-                                                                                    <div className="font-semibold text-sm text-center leading-tight mb-1">{entry.subject || enrolledCourse.name}</div>
-                                                                                    {entry.year && (
-                                                                                        <div className="text-[11px] font-medium text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">
-                                                                                            {entry.year}
-                                                                                        </div>
-                                                                                    )}
-                                                                                    {enrolledCourse.faculty && (
-                                                                                        <div className="text-[11px] text-slate-500 mt-1">{enrolledCourse.faculty}</div>
-                                                                                    )}
-                                                                                </div>
-                                                                            ) : (
-                                                                                <div className="w-full h-full min-h-[50px]"></div>
-                                                                            )}
-                                                                        </td>
-                                                                    );
-                                                                })}
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    );
-                                })()}
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                ) : (
+                                    <p style={{ color: '#64748b', fontSize: '15px', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+                                        No timetable available
+                                    </p>
+                                )}
                             </div>
                         </div>
                     ) : (
