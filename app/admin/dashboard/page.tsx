@@ -112,7 +112,7 @@ export default function AdminDashboard() {
     };
 
     const handleAddTimetableRow = () => {
-        const newRows = [...timetableRows, { day: "Monday", start: "", end: "" }];
+        const newRows = [...timetableRows, { subject: "", year: "", day: "Monday", start: "", end: "" }];
         setEditingSubject(prev => ({ ...(prev || {}), timetable: JSON.stringify(newRows) }));
     };
 
@@ -130,8 +130,8 @@ export default function AdminDashboard() {
 
         for (let i = 0; i < timetableRows.length; i++) {
             const row = timetableRows[i];
-            if (!row.day || !row.start || !row.end) {
-                alert("Please fill all fields in the timetable (Day, Start Time, End Time)");
+            if (!row.subject || !row.year || !row.day || !row.start || !row.end) {
+                alert("Please fill all fields in the timetable (Subject, Year, Day, Start Time, End Time)");
                 return;
             }
         }
@@ -417,6 +417,8 @@ export default function AdminDashboard() {
                                 <table className="table-auto w-full border border-gray-300 text-sm">
                                     <thead className="bg-gray-100">
                                         <tr>
+                                            <th className="border border-gray-300 px-2 py-1 text-left">Subject</th>
+                                            <th className="border border-gray-300 px-2 py-1 text-left">Student Year</th>
                                             <th className="border border-gray-300 px-2 py-1 text-left">Day</th>
                                             <th className="border border-gray-300 px-2 py-1 text-left">Start Time</th>
                                             <th className="border border-gray-300 px-2 py-1 text-left">End Time</th>
@@ -426,6 +428,28 @@ export default function AdminDashboard() {
                                     <tbody>
                                         {timetableRows.map((row: any, i: number) => (
                                             <tr key={i}>
+                                                <td className="border border-gray-300 p-1">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Subject"
+                                                        className="w-full px-2 py-1 border border-gray-300 rounded"
+                                                        value={row.subject || ""}
+                                                        onChange={(e) => handleTimetableChange(i, "subject", e.target.value)}
+                                                    />
+                                                </td>
+                                                <td className="border border-gray-300 p-1">
+                                                    <select
+                                                        className="w-full px-2 py-1 border border-gray-300 rounded"
+                                                        value={row.year || ""}
+                                                        onChange={(e) => handleTimetableChange(i, "year", e.target.value)}
+                                                    >
+                                                        <option value="" disabled>Select Year</option>
+                                                        <option value="1st Year">1st Year</option>
+                                                        <option value="2nd Year">2nd Year</option>
+                                                        <option value="3rd Year">3rd Year</option>
+                                                        <option value="4th Year">4th Year</option>
+                                                    </select>
+                                                </td>
                                                 <td className="border border-gray-300 p-1">
                                                     <select
                                                         className="w-full px-2 py-1 border border-gray-300 rounded"
@@ -469,7 +493,7 @@ export default function AdminDashboard() {
                                         ))}
                                         {timetableRows.length === 0 && (
                                             <tr>
-                                                <td colSpan={4} className="border border-gray-300 p-2 text-center text-gray-500 italic">
+                                                <td colSpan={6} className="border border-gray-300 p-2 text-center text-gray-500 italic">
                                                     No timetable entries added. Click "+ Add Row" to create one.
                                                 </td>
                                             </tr>
