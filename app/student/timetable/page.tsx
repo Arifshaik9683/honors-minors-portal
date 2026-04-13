@@ -19,15 +19,7 @@ const formatTime = (timeString: string) => {
     }
 };
 
-const parseTimetable = (ttString: string) => {
-    if (!ttString) return [];
-    try {
-        const parsed = JSON.parse(ttString);
-        return Array.isArray(parsed) ? parsed : [];
-    } catch {
-        return [];
-    }
-};
+// Removed parseTimetable to dynamically parse in component
 
 export default function Timetable() {
     const router = useRouter();
@@ -46,13 +38,8 @@ export default function Timetable() {
             return;
         }
 
-        // Get student's enrolled course
-        const allStudents = Storage.getStudents();
-        const currentStudent = allStudents.find((s: any) => s.email === student.email);
-
-        if (currentStudent && currentStudent.enrolledSubjectId) {
-            setEnrolledCourseId(currentStudent.enrolledSubjectId);
-        } else if (student.enrolledSubjectId) {
+        // Ensure enrolled subject is fetched correctly
+        if (student && student.enrolledSubjectId) {
             setEnrolledCourseId(student.enrolledSubjectId);
         }
 
@@ -82,7 +69,14 @@ export default function Timetable() {
     if (loading) return <div style={styles.loading}>Loading timetable...</div>;
 
     const enrolledCourse = courses.find(c => String(c.id) === String(enrolledCourseId));
-    const parsedTimetable = parseTimetable(enrolledCourse?.timetable);
+
+    console.log("Subjects (Courses):", courses);
+    console.log("Enrolled ID:", enrolledCourseId);
+    console.log("Matched Course:", enrolledCourse);
+
+    const timetableData = enrolledCourse?.timetable 
+        ? (typeof enrolledCourse.timetable === "string" ? JSON.parse(enrolledCourse.timetable) : enrolledCourse.timetable) 
+        : [];
 
     return (
         <div style={styles.container}>
@@ -118,7 +112,7 @@ export default function Timetable() {
 
                             <div style={{ marginTop: '20px', padding: '20px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                                 <h3 style={{ fontSize: '18px', color: '#1e293b', marginBottom: '15px' }}>Weekly Schedule</h3>
-                                {parsedTimetable.length > 0 ? (
+                                {timetableData && timetableData.length > 0 ? (
                                     <div className="overflow-x-auto rounded-xl border border-gray-200">
                                         <table className="w-full table-auto border-collapse bg-white">
                                             <thead>
@@ -129,7 +123,7 @@ export default function Timetable() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {parsedTimetable.map((row: any, idx: number) => (
+                                                {timetableData.map((row: any, idx: number) => (
                                                     <tr key={idx} className="hover:bg-slate-50 transition-colors">
                                                         <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{row.day || "-"}</td>
                                                         <td className="py-3 px-4 border-b border-gray-100 text-center text-slate-600">{formatTime(row.start)}</td>
