@@ -27,6 +27,7 @@ export default function Enroll() {
                 const res = await fetch('/api/admin/courses');
                 const data = await res.json();
                 setCourses(data);
+                console.log("Courses:", data);
                 setLoading(false);
             } catch (e) {
                 console.error(e);
@@ -35,16 +36,27 @@ export default function Enroll() {
         };
         fetchCourses();
 
-        // Check if student is already enrolled (refresh from storage)
-        const allStudents = Storage.getStudents();
-        const currentStudent = allStudents.find((s: any) => s.email === student.email);
-
-        if (currentStudent && currentStudent.enrolledSubjectId) {
-            setEnrolledCourseId(currentStudent.enrolledSubjectId);
-        } else if (student.enrolledSubjectId) {
-            // Fallback if local session has it but storage doesn't (weird sync)
-            setEnrolledCourseId(student.enrolledSubjectId);
-        }
+        // Fetch LIVE student enrollment asynchronously via DB poll natively covering blank slate/0 setup
+        const fetchEnrollment = async () => {
+            try {
+                if (!student.email) return;
+                const envRes = await fetch(`/api/student/enrollment?email=${encodeURIComponent(student.email)}`);
+                const envData = await envRes.json();
+                
+                if (envData && envData.courseId) {
+                    setEnrolledCourseId(envData.courseId);
+                } else if (student.enrolledSubjectId) {
+                    setEnrolledCourseId(student.enrolledSubjectId);
+                } else {
+                    setEnrolledCourseId(null);
+                }
+                
+                console.log("Enrollment (envData):", envData);
+            } catch (err) {
+                console.error("Failed to fetch enrollment", err);
+            }
+        };
+        fetchEnrollment();
     }, [router]);
 
     const enroll = async (course: any) => {
@@ -125,9 +137,13 @@ export default function Enroll() {
                     <h1 style={styles.title} className="text-3xl sm:text-[42px]">Available Courses</h1>
                     <p style={styles.subtitle}>
                         Select your specialization.
-                        {enrolledCourseId && (
+                        {enrolledCourseId ? (
                             <span style={{ display: "block", marginTop: 10, color: "#10b981", fontWeight: 600 }}>
                                 You are currently enrolled.
+                            </span>
+                        ) : (
+                            <span style={{ display: "block", marginTop: 10, color: "#ef4444", fontWeight: 600 }}>
+                                You are not enrolled in any course.
                             </span>
                         )}
                         {statusMessage && (
@@ -151,20 +167,18 @@ export default function Enroll() {
                 <div style={styles.grid} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
                     {courses.map((course, index) => {
                         const isEnrolled = String(enrolledCourseId) === String(course.id);
-                        const isDisabled = enrolledCourseId !== null && !isEnrolled;
+                        const isSwitchingAllowed = enrolledCourseId && !isEnrolled;
 
                         return (
                             <div
                                 key={course.id}
                                 style={{
                                     ...styles.card,
-                                    opacity: isDisabled ? 0.6 : 1,
-                                    transform: isDisabled ? "scale(0.98)" : "scale(1)",
                                     border: isEnrolled ? "2px solid #2563eb" : "1px solid white",
                                     boxShadow: isEnrolled ? "0 10px 30px rgba(37, 99, 235, 0.15)" : "0 4px 6px -1px rgba(0,0,0,0.05)",
                                     animationDelay: `${index * 0.1}s` // Staggered animation
                                 }}
-                                className={`animate-slide-up ${!isDisabled ? "hover-3d" : ""}`}
+                                className={`animate-slide-up hover-3d`}
                             >
                                 <div style={styles.cardHeader}>
                                     <div>
@@ -199,24 +213,28 @@ export default function Enroll() {
                                 <div style={styles.actionArea}>
                                     {isEnrolled ? (
                                         <button
-                                            onClick={dropCourse}
-                                            style={styles.dropBtn}
-                                            className="hover-scale"
+                                            disabled={true}
+                                            style={{
+                                                ...styles.enrollBtn,
+                                                background: "#dcfce7",
+                                                color: "#166534",
+                                                cursor: "not-allowed",
+                                                boxShadow: "none"
+                                            }}
                                         >
-                                            Contact to Drop
+                                            Enrolled
                                         </button>
                                     ) : (
                                         <button
                                             onClick={() => enroll(course)}
-                                            disabled={isDisabled}
                                             style={{
                                                 ...styles.enrollBtn,
-                                                background: isDisabled ? "#d1d5db" : "#2563eb",
-                                                cursor: isDisabled ? "not-allowed" : "pointer",
+                                                background: "#2563eb",
+                                                cursor: "pointer",
                                             }}
-                                            className={!isDisabled ? "hover-scale" : ""}
+                                            className="hover-scale"
                                         >
-                                            {isDisabled ? "Select to Switch" : "Enroll Now"}
+                                            {isSwitchingAllowed ? "Select to Switch" : "Enroll Now"}
                                         </button>
                                     )}
                                 </div>
