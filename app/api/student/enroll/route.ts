@@ -25,7 +25,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: 'Student not found in database', success: false }, { status: 404 });
         }
 
-        // Check passed: Users can freely dynamically select new courses and switch without manual override.
+        const existing = await enrollmentsCollection.findOne({ studentEmail });
+        if (existing) {
+            return NextResponse.json({ 
+                error: true, 
+                message: "You are already enrolled in a course. Switching is not allowed." 
+            }, { status: 400 });
+        }
 
         // Find course
         let courseObjectId;
@@ -52,35 +58,12 @@ export async function POST(req: Request) {
         const session = client.startSession();
         try {
             await session.withTransaction(async () => {
-                const existingEnrollment = await enrollmentsCollection.findOne({ studentEmail }, { session });
-
-                if (existingEnrollment) {
-                    // Update old course seats
-                    if (existingEnrollment.courseId) {
-                        try {
-                            const oldCourseObjectId = new ObjectId(existingEnrollment.courseId);
-                            await coursesCollection.updateOne(
-                                { _id: oldCourseObjectId },
-                                { $inc: { filledSeats: -1 } },
-                                { session }
-                            );
-                        } catch {}
-                    }
-                    
-                    // Update existing enrollment
-                    await enrollmentsCollection.updateOne(
-                        { studentEmail },
-                        { $set: { courseId: course._id.toString(), enrolledAt: new Date() } },
-                        { session }
-                    );
-                } else {
-                    // Insert new Enrollment
-                    await enrollmentsCollection.insertOne({
-                        studentEmail,
-                        courseId: course._id.toString(),
-                        enrolledAt: new Date()
-                    }, { session });
-                }
+                // Insert new Enrollment normally
+                await enrollmentsCollection.insertOne({
+                    studentEmail,
+                    courseId: course._id.toString(),
+                    enrolledAt: new Date()
+                }, { session });
 
                 // Update new Course seats
                 await coursesCollection.updateOne(

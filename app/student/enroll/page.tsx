@@ -11,6 +11,7 @@ export default function Enroll() {
     const [loading, setLoading] = useState(true);
 
     const [statusMessage, setStatusMessage] = useState<{ text: string, type: 'error' | 'success' | 'info' } | null>(null);
+    const [warningMessage, setWarningMessage] = useState("");
 
     useEffect(() => {
         // Route protection
@@ -63,6 +64,12 @@ export default function Enroll() {
         const student = JSON.parse(localStorage.getItem("student") || "{}");
 
         if (!student.email) return;
+
+        if (enrolledCourseId && course.id !== enrolledCourseId) {
+            setWarningMessage("If you want to leave or change your course, please contact college authorities.");
+            setTimeout(() => setWarningMessage(""), 5000);
+            return;
+        }
 
         const confirmEnroll = window.confirm(`Enroll in ${course.name}?`);
         if (!confirmEnroll) return;
@@ -163,6 +170,20 @@ export default function Enroll() {
                         )}
                     </p>
                 </header>
+
+                {warningMessage && (
+                  <div style={{
+                    background: "#ffecec",
+                    color: "#d8000c",
+                    padding: "10px",
+                    borderRadius: "6px",
+                    marginBottom: "20px",
+                    textAlign: "center",
+                    fontWeight: 600
+                  }}>
+                    {warningMessage}
+                  </div>
+                )}
 
                 <div style={styles.grid} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
                     {courses.map((course, index) => {
