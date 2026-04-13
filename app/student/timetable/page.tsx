@@ -136,26 +136,30 @@ export default function Timetable() {
                                             <table className="w-full table-auto border-collapse bg-white min-w-max">
                                                 <thead>
                                                     <tr className="bg-gray-100 text-slate-700">
-                                                        <th className="py-3 px-4 border border-gray-200 font-semibold text-center w-[120px]">Time / Day</th>
-                                                        {days.map(day => (
-                                                            <th key={day} className="py-3 px-4 border border-gray-200 font-semibold text-center w-[160px]">{day}</th>
-                                                        ))}
+                                                        <th className="py-3 px-4 border border-gray-200 font-semibold text-center w-[120px]">Day</th>
+                                                        {timeSlots.map((slotStr: any) => {
+                                                            const [start, end] = slotStr.split('|');
+                                                            return (
+                                                                <th key={slotStr} className="py-3 px-4 border border-gray-200 font-semibold text-center w-[160px]">
+                                                                    <div className="text-sm shrink-0 whitespace-nowrap">{formatTime(start)}</div>
+                                                                    <div className="text-xs text-gray-500 my-0.5">to</div>
+                                                                    <div className="text-sm shrink-0 whitespace-nowrap">{formatTime(end)}</div>
+                                                                </th>
+                                                            );
+                                                        })}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {timeSlots.map((slotStr: any, idx: number) => {
-                                                        const [start, end] = slotStr.split('|');
+                                                    {days.map((day: string, idx: number) => {
                                                         return (
                                                             <tr key={idx} className="hover:bg-slate-50 transition-colors">
                                                                 <td className="py-3 px-4 border border-gray-200 text-center font-medium text-slate-700 bg-gray-50 align-middle">
-                                                                    <div className="text-sm shrink-0 whitespace-nowrap">{formatTime(start)}</div>
-                                                                    <div className="text-xs text-gray-500 my-1">to</div>
-                                                                    <div className="text-sm shrink-0 whitespace-nowrap">{formatTime(end)}</div>
+                                                                    {day}
                                                                 </td>
-                                                                {days.map(day => {
+                                                                {timeSlots.map((slotStr: any) => {
                                                                     const entry = parsedTimetable.find((t: any) => t.day === day && `${t.start}|${t.end}` === slotStr);
                                                                     return (
-                                                                        <td key={day} className="p-2 border border-gray-200 text-center align-middle h-full">
+                                                                        <td key={slotStr} className="p-2 border border-gray-200 text-center align-middle h-full">
                                                                             {entry ? (
                                                                                 <div className="bg-blue-50 text-blue-900 p-2 rounded border border-blue-100 shadow-sm flex flex-col items-center justify-center h-full min-h-[90px]">
                                                                                     <div className="font-semibold text-sm text-center leading-tight mb-1">{entry.subject || enrolledCourse.name}</div>
@@ -169,7 +173,7 @@ export default function Timetable() {
                                                                                     )}
                                                                                 </div>
                                                                             ) : (
-                                                                                <div className="text-gray-300 text-xs">-</div>
+                                                                                <div className="w-full h-full min-h-[50px]"></div>
                                                                             )}
                                                                         </td>
                                                                     );
