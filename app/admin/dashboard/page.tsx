@@ -147,9 +147,12 @@ export default function AdminDashboard() {
         }
 
         try {
-            // Note: Edit and Add both mapped to POST for now per requirements to store in MongoDB
-            const res = await fetch("/api/admin/courses", {
-                method: "POST",
+            const isEdit = !!editingSubject.id;
+            const url = isEdit ? `/api/admin/courses/${editingSubject.id}` : "/api/admin/courses";
+            const method = isEdit ? "PUT" : "POST";
+
+            const res = await fetch(url, {
+                method,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     subjectName: editingSubject.name,
@@ -162,9 +165,20 @@ export default function AdminDashboard() {
             });
 
             if (res.ok) {
+                const data = await res.json();
+                console.log("Editing ID:", editingSubject?.id);
+                console.log("Method:", method);
+                
+                if (isEdit) {
+                    setSubjects(prev =>
+                        prev.map(s => String(s.id) === String(data.id) ? { ...s, ...data } : s)
+                    );
+                } else {
+                    refreshData();
+                }
+                
                 setIsModalOpen(false);
                 setEditingSubject(null);
-                refreshData();
             } else {
                 alert("Failed to save subject. Please try again.");
             }
