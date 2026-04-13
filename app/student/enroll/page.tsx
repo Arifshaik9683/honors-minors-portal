@@ -44,12 +44,10 @@ export default function Enroll() {
                 const envRes = await fetch(`/api/student/enrollment?email=${encodeURIComponent(student.email)}`);
                 const envData = await envRes.json();
                 
-                if (envData && envData.courseId) {
-                    setEnrolledCourseId(envData.courseId);
-                } else if (student.enrolledSubjectId) {
-                    setEnrolledCourseId(student.enrolledSubjectId);
-                } else {
+                if (!envData || !envData.enrolledCourseId) {
                     setEnrolledCourseId(null);
+                } else {
+                    setEnrolledCourseId(envData.enrolledCourseId);
                 }
                 
                 console.log("Enrollment (envData):", envData);
@@ -65,9 +63,7 @@ export default function Enroll() {
 
         if (!student.email) return;
 
-        const hasActiveEnrollment = !!enrolledCourseId && enrolledCourseId !== "null" && enrolledCourseId !== "undefined";
-
-        if (hasActiveEnrollment && String(course.id) !== String(enrolledCourseId)) {
+        if (enrolledCourseId !== null && course.id !== enrolledCourseId) {
             setWarningMessage("If you want to leave or change your course, please contact college authorities.");
             setTimeout(() => setWarningMessage(""), 5000);
             return;
@@ -146,7 +142,7 @@ export default function Enroll() {
                     <h1 style={styles.title} className="text-3xl sm:text-[42px]">Available Courses</h1>
                     <p style={styles.subtitle}>
                         Select your specialization.
-                        { (!!enrolledCourseId && enrolledCourseId !== "null" && enrolledCourseId !== "undefined") ? (
+                        {enrolledCourseId !== null ? (
                             <span style={{ display: "block", marginTop: 10, color: "#10b981", fontWeight: 600 }}>
                                 You are currently enrolled.
                             </span>
@@ -189,9 +185,8 @@ export default function Enroll() {
 
                 <div style={styles.grid} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
                     {courses.map((course, index) => {
-                        const hasEnrollment = !!enrolledCourseId && enrolledCourseId !== "null" && enrolledCourseId !== "undefined";
-                        const isEnrolled = hasEnrollment && String(enrolledCourseId) === String(course.id);
-                        const isSwitchingAllowed = hasEnrollment && !isEnrolled;
+                        const isEnrolled = enrolledCourseId !== null && String(enrolledCourseId) === String(course.id);
+                        const isSwitchingAllowed = enrolledCourseId !== null && !isEnrolled;
 
                         return (
                             <div

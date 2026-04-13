@@ -16,10 +16,10 @@ export async function GET(req: Request) {
         const enrollment = await db.collection('enrollments').findOne({ studentEmail: email });
         
         if (!enrollment) {
-            return NextResponse.json(null, { status: 200 });
+            return NextResponse.json({ enrolledCourseId: null }, { status: 200 });
         }
         
-        return NextResponse.json(enrollment, { status: 200 });
+        return NextResponse.json({ enrolledCourseId: enrollment.courseId }, { status: 200 });
 
     } catch (error) {
         return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
